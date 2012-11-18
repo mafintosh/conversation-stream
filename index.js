@@ -8,7 +8,8 @@ var RequestStream = function() {
 	this._buffer = '';
 	this._offset = 0;
 
-	this._ids = 1;
+	this._sent = 0;
+	this._rcvd = 0;
 	this._callbacks = {};
 
 	this.readable = true;
@@ -70,12 +71,13 @@ RequestStream.prototype.request = function(message, callback) {
 	if (!callback) return this._out([0, message]);
 
 	var self = this;
-	var id = this._ids++;
+	var id = ++this._sent;
 
 	this._callbacks[id] = function(err, value) {
 		delete self._callbacks[id];
 		self._rcvd++;
 		callback(err, value);
+		if (self._rcvd === self._sent) self.emit('idle');
 	};
 
 	this._out([id,message]);
