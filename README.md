@@ -1,6 +1,6 @@
-# request-stream
+# Request-Stream
 
-Request-Stream is a stream implementing a json request and response protocol
+Request-Stream is a stream implementing a JSON request and response protocol
 
 	npm install request-stream
 
@@ -21,7 +21,7 @@ net.createServer(function(socket) {
 }).listen(9000);
 ```
 
-Since the server is a tcp server we just need to create a tcp socket and pipe our request to that.
+To make a request to the server we need to create a socket to the server and pipe our request to that.
 
 ``` js
 var socket = net.connect(9000);
@@ -34,4 +34,5 @@ r.request('echo me please', function(err, reply) {
 });
 ```
 
-Since `r` is just a stream we can pipe it to any kind of transport (even WebSockets using [shoe](https://github.com/substack/shoe)).
+If we wanted to use tls instead of tcp we could just have implemented the above example using tls streams.
+We could even use WebSockets using [shoe](https://github.com/substack/shoe)).
