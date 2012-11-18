@@ -1,0 +1,8 @@
+{
+ "name":"request-stream",
+ "version":"0.1.0",
+ "repository": "git://github.com/mafintosh/request-stream",
+ "description":"json request-response over a stream",
+ "keywords": ["stream", "request", "response", "json"],
+ "author": "Mathias Buus Madsen <mathiasbuus@gmail.com>"
+}
