@@ -34,5 +34,5 @@ r.request('echo me please', function(err, reply) {
 });
 ```
 
-If we wanted to use tls instead of tcp we could just have implemented the above example using tls streams.
+If we wanted to use `tls` instead of `tcp` we could just have implemented the above example using `tls` streams.
 We could even use WebSockets using [shoe](https://github.com/substack/shoe)).
