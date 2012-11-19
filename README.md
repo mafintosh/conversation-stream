@@ -54,7 +54,7 @@ net.createServer(function(socket) {
 	socket.pipe(r).pipe(socket);
 
 	r.on('request', function(request, respond) {
-		respond(null, {echo:request});
+		r.request({server:request}, respond);
 	});
 }).listen(9000);
 ```
@@ -67,11 +67,15 @@ var r = rs();
 
 socket.pipe(r).pipe(socket);
 
+r.on('request', function(request, respond) {
+	respond(null, {client:request});
+});
+
 r.request('echo me please', function(err, reply) {
-	console.log(err, reply);  // prints {echo:'echo me please'}
+	console.log(err, reply);  // prints {client:{server:'echo me please'}}
 });
 r.request('echo me please again', function(err, reply) {
-	console.log(err, reply); // prints {echo:'echo me please again'}
+	console.log(err, reply); // prints {client:{server:'echo me please again'}}
 });
 ```
 
