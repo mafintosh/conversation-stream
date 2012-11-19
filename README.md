@@ -6,7 +6,7 @@ Request-Stream allows you to send a JSON request and wait for a JSON reply over 
 
 ## Summary
 
-Request-Stream makes it easy to implement request/response services over streams.
+Request-Stream makes it easy to implement [request-response](http://en.wikipedia.org/wiki/Request-response) services over streams.
 
 To listen and reply to requests you just need to listen to the `request` event
 
