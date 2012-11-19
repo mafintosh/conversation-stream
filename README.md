@@ -1,12 +1,12 @@
 # Request-Stream
 
-Request-Stream is a stream implementing a JSON request and response protocol
+Request-Stream allows you to send a JSON request and wait for a JSON reply over a stream
 
 	npm install request-stream
 
 ## Summary
 
-Request-Stream allows you to send a JSON request and wait for a reply over a stream
+Request-Stream makes it easy to implement request/response services over streams.
 
 To listen and reply to requests you just need to listen to the `request` event
 
