@@ -30,7 +30,10 @@ var r = rs();
 socket.pipe(r).pipe(socket);
 
 r.request('echo me please', function(err, reply) {
-	console.log(err, reply);
+	console.log(err, reply);  // prints {echo:'echo me please'}
+});
+r.request('echo me please again', function(err, reply) {
+	console.log(err, reply); // prints {echo:'echo me please again'}
 });
 ```
 
