@@ -4,6 +4,44 @@ Request-Stream is a stream implementing a JSON request and response protocol
 
 	npm install request-stream
 
+## Summary
+
+Request-Stream allows you to send a JSON request and wait for a reply over a stream
+
+To listen and reply to requests you just need to listen to the `request` event
+
+``` js
+var r = rs();
+
+fromStream.pipe(r).pipe(fromStream);
+
+r.on('request', function(request, respond) {
+	respond(null, request[0]+request[1]); // send a reply back to the requester
+});
+```
+
+To send requests and wait for replies you call `r.request(message, callback)`
+
+``` js
+var rs = require('request-stream');
+var r = rs();
+
+toStream.pipe(r).pipe(toStream);
+
+r.request([1,2], function(err, reply) {
+	console.log(err, reply); // prints 3
+});
+
+r.request([2,3], function(err, reply) {
+	console.log(err, reply); // prints 5
+});
+
+```
+
+If you don't care about replying to requests you should probably use something like [emit-stream](https://github.com/substack/emit-stream) instead
+
+## Example
+
 Lets try to setup a simple server
 
 ``` js
