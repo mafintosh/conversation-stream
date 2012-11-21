@@ -2,6 +2,8 @@ var Stream = require('stream');
 
 var noop = function() {};
 
+noop.noop = true; // a flag so you can check if noop has been passed
+
 var RequestStream = function() {
 	var self = this;
 
@@ -107,6 +109,6 @@ RequestStream.prototype._out = function(message) {
 	this.emit('data', JSON.stringify(message)+'\n');
 };
 
-module.exports = function(options) {
-	return new RequestStream(options);
+module.exports = function() {
+	return new RequestStream();
 };
