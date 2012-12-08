@@ -1,8 +1,8 @@
 {
- "name":"request-stream",
- "version":"0.1.2",
- "repository": "git://github.com/mafintosh/request-stream",
- "description":"json request-response over a stream",
- "keywords": ["stream", "request", "response", "json"],
+ "name":"conversation-stream",
+ "version":"0.1.0",
+ "repository": "git://github.com/mafintosh/conversation-stream",
+ "description":"json conversations over a stream",
+ "keywords": ["stream", "conversation", "json"],
  "author": "Mathias Buus Madsen <mathiasbuus@gmail.com>"
 }

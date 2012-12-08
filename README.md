@@ -1,80 +1,78 @@
-# Request-Stream
+# Conversation-Stream
 
-Request-Stream allows you to send a JSON request and wait for a JSON reply over a stream
+Conversation-Stream allows you to have a JSON conversation over a stream.
 
-	npm install request-stream
+	npm install conversation-stream
 
 ## Summary
 
-Request-Stream makes it easy to implement [request-response](http://en.wikipedia.org/wiki/Request-response) services over streams.
-
-To listen and reply to requests you just need to listen to the `request` event
+To listen for messages you just need to listen to the `message` event
 
 ``` js
-var r = rs();
+var cs = require('conversation-stream')
+var conversation = cs();
 
-fromStream.pipe(r).pipe(fromStream);
+fromStream.pipe(conversation).pipe(fromStream);
 
-r.on('request', function(request, respond) {
-	respond(null, request[0]+request[1]); // send a reply back to the requester
+conversation.on('message', function(message, respond) {
+	respond(null, {echo:message}); // send a reply back if you want to
 });
 ```
 
-To send requests and wait for replies you call `r.request(message, callback)`
+To send messages you call `conversation.send(message)`
+To send messages and wait for a reply you call `conversation.send(message, callback)`
 
 ``` js
-var rs = require('request-stream');
-var r = rs();
+var cs = require('conversation-stream');
+var conversation = cs();
 
-toStream.pipe(r).pipe(toStream);
+toStream.pipe(conversation).pipe(toStream);
 
-r.request([1,2], function(err, reply) {
-	console.log(err, reply); // prints 3
+conversation.send('hello', function(err, reply) {
+	console.log(err, reply); // prints {echo:'hello'}
 });
 
-r.request([2,3], function(err, reply) {
-	console.log(err, reply); // prints 5
+conversation.send('world', function(err, reply) {
+	console.log(err, reply); // prints {echo:'world'}
 });
 
 ```
-
-If you don't care about replying to requests you should probably use something like [emit-stream](https://github.com/substack/emit-stream) instead
 
 ## Example
 
 Lets try to setup a simple server
 
 ``` js
-var rs = require('request-stream');
+var cs = require('conversation-stream');
 var net = require('net');
 
 net.createServer(function(socket) {
-	var r = rs();
+	var conversation = cs();
 
-	socket.pipe(r).pipe(socket);
+	socket.pipe(conversation).pipe(socket);
 
-	r.on('request', function(request, respond) {
-		r.request({server:request}, respond);
+	conversation.on('message', function(message, respond) {
+		conversation.send({server:message}, respond);
 	});
 }).listen(9000);
 ```
 
-To make a request to the server we need to create a socket to the server and pipe our request to that.
+To start a conversation to the server we need to create a socket to the server and pipe our message to that.
 
 ``` js
 var socket = net.connect(9000);
-var r = rs();
+var conversation = cs();
 
-socket.pipe(r).pipe(socket);
+socket.pipe(conversation).pipe(socket);
 
-r.on('request', function(request, respond) {
-	respond(null, {client:request});
+conversation.on('message', function(message, respond) {
+	respond(null, {client:message});
 });
 
-r.request('echo me please', function(err, reply) {
+conversation.send('echo me please', function(err, reply) {
 	console.log(err, reply);  // prints {client:{server:'echo me please'}}
 });
-r.request('echo me please again', function(err, reply) {
+conversation.send('echo me please again', function(err, reply) {
 	console.log(err, reply); // prints {client:{server:'echo me please again'}}
 });
 ```

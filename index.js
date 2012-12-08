@@ -4,7 +4,7 @@ var noop = function() {};
 
 noop.noop = true; // a flag so you can check if noop has been passed
 
-var RequestStream = function() {
+var ConversationStream = function() {
 	var self = this;
 
 	this._buffer = '';
@@ -30,9 +30,9 @@ var RequestStream = function() {
 	Stream.call(this);
 };
 
-RequestStream.prototype.__proto__ = Stream.prototype;
+ConversationStream.prototype.__proto__ = Stream.prototype;
 
-RequestStream.prototype.write = function(data) {
+ConversationStream.prototype.write = function(data) {
 	var index = data.indexOf('\n');
 	var offset = index+1;
 
@@ -57,7 +57,7 @@ RequestStream.prototype.write = function(data) {
 	this._buffer = data;
 };
 
-RequestStream.prototype.end = function(data) {
+ConversationStream.prototype.end = function(data) {
 	if (data) this.write(data);
 	if (!this.readable) return;
 	this.readable = false;
@@ -65,12 +65,12 @@ RequestStream.prototype.end = function(data) {
 	this.emit('end');
 };
 
-RequestStream.prototype.destroy = function() {
+ConversationStream.prototype.destroy = function() {
 	this.end();
 };
 
-RequestStream.prototype.request = function(message, callback) {
-	if (!callback) return this._out([0, message]);
+ConversationStream.prototype.send = function(message, callback) {
+	if (!callback || callback.noop) return this._out([0, message]);
 
 	var self = this;
 	var id = ++this._sent;
@@ -85,7 +85,7 @@ RequestStream.prototype.request = function(message, callback) {
 	this._out([id,message]);
 };
 
-RequestStream.prototype._in = function(message) {
+ConversationStream.prototype._in = function(message) {
 	try {
 		message = JSON.parse(message);
 	} catch (err) {
@@ -102,13 +102,13 @@ RequestStream.prototype._in = function(message) {
 		self._out([-id, message]);
 	};
 
-	this.emit('request', message[1], reply);
+	this.emit('message', message[1], reply);
 };
 
-RequestStream.prototype._out = function(message) {
+ConversationStream.prototype._out = function(message) {
 	this.emit('data', JSON.stringify(message)+'\n');
 };
 
 module.exports = function() {
-	return new RequestStream();
+	return new ConversationStream();
 };
