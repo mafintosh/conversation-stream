@@ -1,6 +1,6 @@
 {
  "name":"conversation-stream",
- "version":"0.1.0",
+ "version":"0.1.1",
  "repository": "git://github.com/mafintosh/conversation-stream",
  "description":"json conversations over a stream",
  "keywords": ["stream", "conversation", "json"],
